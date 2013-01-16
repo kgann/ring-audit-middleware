@@ -16,15 +16,18 @@ Ring middleware to facilitate audit requirements.
 (def audit-fn (fn [req] ... )))
 
 (def app
-  (-> app (wrap-audit-middleware audit-fn)))
+  (-> main-routes
+      (wrap-audit-middleware audit-fn)))
 
 ;; privide uri-matchers to determine if the route should be audited
 (def app
-  (-> app (wrap-audit-middleware audit-fn :uri-matchers [#"foo/bar/[1-9]+" #"admin/*" #"users"])))
+  (-> main-routes
+      (wrap-audit-middleware audit-fn :uri-matchers [#"foo/bar/[1-9]+" #"admin/*" #"users"])))
 
 ;; instruct the middleware to execute audit-fn in a future
 (def app
-  (-> app (wrap-audit-middleware audit-fn :future true)))
+  (-> main-routes
+      (wrap-audit-middleware audit-fn :future true)))
 ```
 
 ## License
