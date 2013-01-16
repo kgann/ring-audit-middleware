@@ -34,6 +34,12 @@
     (audit-handler mock-req)
     (was @handler-called)))
 
+(defaudittest audit-handler-with-non-matching-matchers
+  (let [mock-req (request :get "/foo")
+        audit-handler (wrap-audit-middleware mock-req audit-fn :uri-matchers [#"bar" #"baz"])]
+    (audit-handler mock-req)
+    (is (= false @handler-called))))
+
 (defaudittest force-audit-handler
   (let [mock-req (assoc (request :get "/foo") :audit true)
         audit-handler (wrap-audit-middleware mock-req audit-fn :uri-matchers nil)]
