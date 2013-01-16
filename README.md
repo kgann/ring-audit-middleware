@@ -13,6 +13,8 @@ Ring middleware to facilitate audit requirements.
   (POST "/admin" {:audit true :body ... })  ;; explicitly force this route to be audited with the :audit key
   (POST "/users" {:audit false :body ... })) ;; force this route to not be audited even if uri-matchers find a match
 
+;; fn to be executed when the middleware finds a route that is supposed to be audited
+;; this fn could write to a log, db, message queue or whatever you want it to do
 (def audit-fn (fn [req] ... )))
 
 (def app
