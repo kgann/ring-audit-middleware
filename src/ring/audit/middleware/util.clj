@@ -1,4 +1,4 @@
-(ns ring-audit-middleware.util
+(ns ring.audit.middleware.util
   {:author "Kyle Gann"
     :doc "Utilities for ring-audit-middleware"})
 

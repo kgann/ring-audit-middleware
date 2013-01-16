@@ -1,5 +1,5 @@
-(ns ring-audit-middleware.test.core
-  (:use ring-audit-middleware.core
+(ns ring.audit.middleware.test.core
+  (:use ring.audit.middleware.core
         clojure.test
         ring.mock.request))
 

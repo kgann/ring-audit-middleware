@@ -1,7 +1,7 @@
-(ns ring-audit-middleware.core
+(ns ring.audit.middleware.core
   {:author "Kyle Gann"
     :doc "Basic request auditing middleware for ring based applications."}
-  (:require [ring-audit-middleware.util :as util]))
+  (:require [ring.audit.middleware.util :as util]))
 
 (defn wrap-audit-middleware
   [app audit-handler & {:keys [uri-matchers future?]
