@@ -29,6 +29,6 @@ Ring middleware to facilitate audit requirements.
 
 ## License
 
-Copyright (C) 2013 FIXME
+Copyright (C) 2013 Kyle Gann
 
 Distributed under the Eclipse Public License, the same as Clojure.
