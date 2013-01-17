@@ -2,33 +2,34 @@
 
 Ring middleware to facilitate audit requirements.
 
-## Usage
+## Usage - Compojure example
 
 ```clojure
-(ns my.app
-  (:use [ring.audit.middleware.core :only [wrap-audit-middleware]]))
+(ns foo.bar
+  (:use compojure.core
+        [ring.audit.middleware.core :only [wrap-audit-middleware]])
+  (:require [compojure.handler :as handler]
+            [compojure.route :as route]))
 
-(defroutes main-routes
+(def audit-fn (fn [req] ... ))
+
+(defroutes foo-app
   (GET "/foo/bar/:id" ...) ;; rely on uri-matchers if provided - default is to audit route
   (POST "/admin" {:audit true :body ... })  ;; explicitly force this route to be audited with the :audit key
   (POST "/users" {:audit false :body ... })) ;; force this route to not be audited even if uri-matchers find a match
 
-;; fn to be executed when the middleware finds a route that is supposed to be audited
-;; this fn could write to a log, db, message queue or whatever you want it to do
-(def audit-fn (fn [req] ... )))
-
 (def app
-  (-> main-routes
-      (wrap-audit-middleware audit-fn)))
+  (-> (handler/site foo-app)
+      (wrap-audit-middleware audit-fn :uri-matchers [#"bar"] :future true)))
 
 ;; privide uri-matchers to determine if the route should be audited
 (def app
-  (-> main-routes
+  (-> (handler/site foo-app)
       (wrap-audit-middleware audit-fn :uri-matchers [#"foo/bar/[1-9]+" #"admin/*" #"users"])))
 
 ;; instruct the middleware to execute audit-fn in a future
 (def app
-  (-> main-routes
+  (-> (handler/site foo-app)
       (wrap-audit-middleware audit-fn :future true)))
 ```
 
