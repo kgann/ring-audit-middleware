@@ -2,6 +2,12 @@
 
 Ring middleware to facilitate audit requirements.
 
+Makes use of [clout](https://github.com/weavejester/clout) to match routes and execute an fn of your choice!
+
+Have it write to a db, send a message to a queue, log a messafge, send an email...
+
+Your fn is passed the ring request map
+
 ## Usage - Compojure example
 
 ```clojure
@@ -11,23 +17,32 @@ Ring middleware to facilitate audit requirements.
   (:require [compojure.handler :as handler]
             [compojure.route :as route]))
 
+;; this fn must accept a single argument, the ring request map
 (def audit-fn (fn [req] ... ))
 
 (defroutes foo-app
-  (GET "/foo/bar/:id" ...) ;; rely on uri-matchers if provided - default is to audit route
-  (POST "/admin" {:audit true :body ... })  ;; explicitly force this route to be audited with the :audit key
-  (POST "/users" {:audit false :body ... })) ;; force this route to not be audited even if uri-matchers find a match
+  (GET "/foo/bar/:id" ...)
+  (POST "/admin/:id/edit" ...)
+  (POST "/users" ...))
+```
+### with this setup, you have a few options
 
+Audit all all routes
+```clojure
 (def app
   (-> (handler/site foo-app)
-      (wrap-audit-middleware audit-fn :uri-matchers [#"bar"] :future true)))
+      (wrap-audit-middleware audit-fn)))
+```
 
-;; privide uri-matchers to determine if the route should be audited
+Provide a collection of routes (see clout documentation) to determine if the request should be audited
+```clojure
 (def app
-  (-> (handler/site foo-app)
-      (wrap-audit-middleware audit-fn :uri-matchers [#"foo/bar/[1-9]+" #"admin/*" #"users"])))
+  (-> (handler/site foo-app) ;; audit all admin member routes and all user routes
+      (wrap-audit-middleware audit-fn :routes [#"/admin/:id/*" #"/users/*"])))
+```
 
-;; instruct the middleware to execute audit-fn in a future
+Instruct the middleware to audit routes in a future (useful for long running audits)
+```clojure
 (def app
   (-> (handler/site foo-app)
       (wrap-audit-middleware audit-fn :future true)))
