@@ -9,7 +9,7 @@
 
 (def mock-app (fn [_] {} ))
 
-(defmacro ^{:private true} defaudittest [name & body]
+(defmacro ^{:private true} def-audit-test [name & body]
   `(deftest ~name
      (reset! handler-called false)
      ~@body
@@ -18,38 +18,41 @@
 (defmacro ^{:private true} was [expr]
   `(is (= true ~expr)))
 
-(defaudittest audit-handler-without-matcher
+(defmacro ^{:private true} was-not [expr]
+  `(is (= false ~expr)))
+
+(def-audit-test audit-handler-without-matcher
   (let [mock-req (request :get "/")
         app (wrap-audit-middleware mock-app audit-fn)]
     (app mock-req)
     (was @handler-called)))
 
-(defaudittest audit-handler-with-matcher
+(def-audit-test audit-handler-with-matcher
   (let [mock-req (request :get "/foo")
         app (wrap-audit-middleware mock-app audit-fn :routes ["/:id"])]
     (app mock-req)
     (was @handler-called)))
 
-(defaudittest audit-handler-with-matchers
+(def-audit-test audit-handler-with-matchers
   (let [mock-req (request :get "/foo")
         app (wrap-audit-middleware mock-app audit-fn :routes ["/bar/:id" "/foo"])]
     (app mock-req)
     (was @handler-called)))
 
-(defaudittest audit-handler-with-non-matching-matchers
+(def-audit-test audit-handler-with-non-matching-matchers
   (let [mock-req (request :get "/foo")
         app (wrap-audit-middleware mock-app audit-fn :routes ["/bar/:id"])]
     (app mock-req)
-    (is (= false @handler-called))))
+    (was-not @handler-called)))
 
-(defaudittest force-audit-handler
+(def-audit-test force-audit-handler
   (let [mock-req (assoc (request :get "/foo") :audit true)
         app (wrap-audit-middleware mock-app audit-fn)]
     (app mock-req)
     (was @handler-called)))
 
-(defaudittest skip-audit-handler
+(def-audit-test skip-audit-handler
   (let [mock-req (assoc (request :get "/foo") :audit false)
         app (wrap-audit-middleware mock-app audit-fn)]
     (app mock-req)
-    (is (= false @handler-called))))
+    (was-not @handler-called)))
