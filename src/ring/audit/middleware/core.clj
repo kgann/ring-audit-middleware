@@ -8,9 +8,7 @@
   [app handler & {:keys [routes future?] :or {routes [] future? false}}]
   (let [compiled-routes (map route-compile routes)]
     (fn [req]
-      (when-not (= false (:audit req)) ;; require strict boolean
-        (if (or (= true (:audit req))
-                (empty? routes) ;; audit all routes
-                (some #(route-matches % req) compiled-routes))
-          (util/wrap-future future? (handler req)))
-      (app req)))))
+      (let [params (some #(route-matches % req) compiled-routes)]
+        (if (or (empty? routes) params) ;; params is truthy if a match is found
+          (util/wrap-future future? (handler req params))))
+      (app req))))

@@ -5,7 +5,7 @@
 
 (def handler-called (atom false))
 
-(def audit-fn (fn [_] (reset! handler-called true)))
+(def audit-fn (fn [_ _] (reset! handler-called true)))
 
 (def mock-app (fn [_] {} ))
 
@@ -42,17 +42,5 @@
 (def-audit-test audit-handler-with-non-matching-matchers
   (let [mock-req (request :get "/foo")
         app (wrap-audit-middleware mock-app audit-fn :routes ["/bar/:id"])]
-    (app mock-req)
-    (was-not @handler-called)))
-
-(def-audit-test force-audit-handler
-  (let [mock-req (assoc (request :get "/foo") :audit true)
-        app (wrap-audit-middleware mock-app audit-fn)]
-    (app mock-req)
-    (was @handler-called)))
-
-(def-audit-test skip-audit-handler
-  (let [mock-req (assoc (request :get "/foo") :audit false)
-        app (wrap-audit-middleware mock-app audit-fn)]
     (app mock-req)
     (was-not @handler-called)))

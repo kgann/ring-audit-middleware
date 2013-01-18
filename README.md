@@ -19,11 +19,16 @@ Have it write to a db, send a message to a queue, send an email...
   (GET "/foo/bar/:id" ...)
   (POST "/admin/:id/edit" ...)
   (POST "/users" ...))
-
-;; must accept a single argument, the ring request map
-(def audit-fn (fn [req] ... ))
 ```
-#### Examples
+
+#### The audit ```fn```
+
+Accept a two arguments, the ring request map and map of request parameters from clout (see clout documentation)
+```clojure
+(defn audit-fn [req params] ... )
+```
+
+#### Options for ```wrap-audit-middleware```
 
 Audit all routes
 - - -
