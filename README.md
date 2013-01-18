@@ -89,6 +89,12 @@ Easily create as many audit middleware pieces as you need
       (wrap-audit-middleware some-audit-fn-for-user-routes :routes ["/user/*"])))
 ```
 
+## Todo
+
+Right now, all audit ```fn```'s are executed for their side-effects and they can not modify the request map
+
+  1. allow for request map modification as well as side-effects (middleware could handle authentication)
+
 ## License
 
 Copyright (C) 2013 Kyle Gann
