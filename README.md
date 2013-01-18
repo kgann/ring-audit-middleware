@@ -38,7 +38,7 @@ Provide a collection of routes (see clout documentation) to determine if the req
 ```clojure
 (def app
   (-> (handler/site foo-app) ;; audit all admin member routes and all user routes
-      (wrap-audit-middleware audit-fn :routes [#"/admin/:id/*" #"/users/*"])))
+      (wrap-audit-middleware audit-fn :routes ["/admin/:id/*" "/users/*"])))
 ```
 
 Instruct the middleware to audit routes in a future (useful for long running audits)
