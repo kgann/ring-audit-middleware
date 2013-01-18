@@ -87,8 +87,8 @@ Easily create as many audit middleware pieces as you need
 ```clojure
 (def app
   (-> (handler/site foo-app)
-      (wrap-audit-middleware some-audit-fn-for-admin-routes :routes ["/admin/:id/*"])
-      (wrap-audit-middleware some-audit-fn-for-user-routes :routes ["/user/*"] :future? true)))
+      (wrap-audit-middleware some-fn-for-admin-routes :routes ["/admin/:id/*"])
+      (wrap-audit-middleware some-fn-for-user-routes :routes ["/user/*"] :future? true)))
 ```
 
 ## Todo
