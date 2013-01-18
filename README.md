@@ -23,7 +23,7 @@ Have it write to a db, send a message to a queue, send an email...
 
 #### The audit ```fn```
 
-Accept a two arguments, the ring request map and map of request parameters from clout (see clout documentation)
+Must accept two arguments, the ring request map and map of request parameters from clout (see clout documentation)
 ```clojure
 (defn audit-fn [req params] ... )
 ```
@@ -52,6 +52,14 @@ Instruct the middleware to audit routes in a future (useful for long running aud
 (def app
   (-> (handler/site foo-app)
       (wrap-audit-middleware audit-fn :future true)))
+```
+
+Why not both?
+- - -
+```clojure
+(def app
+  (-> (handler/site foo-app)
+      (wrap-audit-middleware audit-fn :routes ["/admin/:id/*"] :future true)))
 ```
 
 ## License
