@@ -6,6 +6,10 @@ Makes use of [clout](https://github.com/weavejester/clout) to match routes and e
 
 Have it write to a db, send a message to a queue, send an email...
 
+## Installation
+
+    [ring-audit-middleware "0.1.0"]
+
 ## Compojure example
 
 ```clojure
