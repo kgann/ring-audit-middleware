@@ -7,10 +7,9 @@
   [app audit-handler & {:keys [uri-matchers future?]
                         :or {uri-matchers nil future? false}}]
   (fn [req]
-    (if (= true (:audit req))
-      (util/wrap-future future? (audit-handler req))
-      (if (and (not (= false (:audit req)))
-               (or (not uri-matchers)
-                   (and uri-matchers (some #(re-find % (:uri req)) uri-matchers))))
-          (util/wrap-future future? (audit-handler req))))
-    (app req)))
+    (when-not (= false (:audit req))
+      (if (or (= true (:audit req))
+              (not uri-matchers)
+              (some #(re-find % (:uri req)) uri-matchers))
+        (util/wrap-future future? (audit-handler req)))
+    (app req))))
