@@ -69,7 +69,7 @@ Instruct the middleware to audit routes in a future (useful for long running aud
 ```clojure
 (def app
   (-> (handler/site foo-app)
-      (wrap-audit-middleware audit-fn :future true)))
+      (wrap-audit-middleware audit-fn :future? true)))
 ```
 
 - - -
@@ -78,7 +78,7 @@ Why not both?
 ```clojure
 (def app
   (-> (handler/site foo-app)
-      (wrap-audit-middleware audit-fn :routes ["/admin/:id/*"] :future true)))
+      (wrap-audit-middleware audit-fn :routes ["/admin/:id/*"] :future? true)))
 ```
 
 - - -
@@ -88,7 +88,7 @@ Easily create as many audit middleware pieces as you need
 (def app
   (-> (handler/site foo-app)
       (wrap-audit-middleware some-audit-fn-for-admin-routes :routes ["/admin/:id/*"])
-      (wrap-audit-middleware some-audit-fn-for-user-routes :routes ["/user/*"])))
+      (wrap-audit-middleware some-audit-fn-for-user-routes :routes ["/user/*"] :future? true)))
 ```
 
 ## Todo
