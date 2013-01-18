@@ -15,7 +15,7 @@ Have it write to a db, send a message to a queue, send an email...
 ```clojure
 (ns foo.bar
   (:use compojure.core
-        [ring.audit.middleware.core :only [wrap-audit-middleware]])
+        ring.audit.middleware.core)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]))
 
