@@ -37,7 +37,7 @@ Must accept two arguments
   1. ring request map
   2. request parameters from clout (see clout documentation)
 
-##### Note - the audit ```fn``` is for side-effects only. If the request map is modified, it will not be persisted through the remaining middleware
+##### Note - the audit ```fn``` is for side-effects only. If the request map is modified, it will not be persisted through the remaining middleware stack
 
 ```clojure
 (defn audit-fn [req params] ... )
