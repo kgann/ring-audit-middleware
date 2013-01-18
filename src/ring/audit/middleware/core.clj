@@ -1,15 +1,16 @@
 (ns ring.audit.middleware.core
   {:author "Kyle Gann"
     :doc "Basic request auditing middleware for ring based applications."}
-  (:require [ring.audit.middleware.util :as util]))
+  (:require [ring.audit.middleware.util :as util])
+  (:use clout.core))
 
 (defn wrap-audit-middleware
-  [app audit-handler & {:keys [uri-matchers future?]
-                        :or {uri-matchers nil future? false}}]
-  (fn [req]
-    (when-not (= false (:audit req))
-      (if (or (= true (:audit req))
-              (not uri-matchers)
-              (some #(re-find % (:uri req)) uri-matchers))
-        (util/wrap-future future? (audit-handler req)))
-    (app req))))
+  [app handler & {:keys [routes future?] :or {routes [] future? false}}]
+  (let [compiled-routes (map route-compile routes)]
+    (fn [req]
+      (when-not (= false (:audit req)) ;; require strict boolean
+        (if (or (= true (:audit req))
+                (empty? routes) ;; audit all routes
+                (some #(route-matches % req) compiled-routes))
+          (util/wrap-future future? (handler req)))
+      (app req)))))

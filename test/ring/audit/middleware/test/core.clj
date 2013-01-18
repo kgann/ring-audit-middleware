@@ -7,6 +7,8 @@
 
 (def audit-fn (fn [_] (reset! handler-called true)))
 
+(def mock-app (fn [_] {} ))
+
 (defmacro ^{:private true} defaudittest [name & body]
   `(deftest ~name
      (reset! handler-called false)
@@ -18,36 +20,36 @@
 
 (defaudittest audit-handler-without-matcher
   (let [mock-req (request :get "/")
-        audit-handler (wrap-audit-middleware mock-req audit-fn)]
-    (audit-handler mock-req)
+        app (wrap-audit-middleware mock-app audit-fn)]
+    (app mock-req)
     (was @handler-called)))
 
 (defaudittest audit-handler-with-matcher
   (let [mock-req (request :get "/foo")
-        audit-handler (wrap-audit-middleware mock-req audit-fn :uri-matchers [#"foo"])]
-    (audit-handler mock-req)
+        app (wrap-audit-middleware mock-app audit-fn :routes ["/:id"])]
+    (app mock-req)
     (was @handler-called)))
 
 (defaudittest audit-handler-with-matchers
   (let [mock-req (request :get "/foo")
-        audit-handler (wrap-audit-middleware mock-req audit-fn :uri-matchers [#"bar" #"foo"])]
-    (audit-handler mock-req)
+        app (wrap-audit-middleware mock-app audit-fn :routes ["/bar/:id" "/foo"])]
+    (app mock-req)
     (was @handler-called)))
 
 (defaudittest audit-handler-with-non-matching-matchers
   (let [mock-req (request :get "/foo")
-        audit-handler (wrap-audit-middleware mock-req audit-fn :uri-matchers [#"bar" #"baz"])]
-    (audit-handler mock-req)
+        app (wrap-audit-middleware mock-app audit-fn :routes ["/bar/:id"])]
+    (app mock-req)
     (is (= false @handler-called))))
 
 (defaudittest force-audit-handler
   (let [mock-req (assoc (request :get "/foo") :audit true)
-        audit-handler (wrap-audit-middleware mock-req audit-fn :uri-matchers nil)]
-    (audit-handler mock-req)
+        app (wrap-audit-middleware mock-app audit-fn)]
+    (app mock-req)
     (was @handler-called)))
 
 (defaudittest skip-audit-handler
   (let [mock-req (assoc (request :get "/foo") :audit false)
-        audit-handler (wrap-audit-middleware mock-req audit-fn)]
-    (audit-handler mock-req)
+        app (wrap-audit-middleware mock-app audit-fn)]
+    (app mock-req)
     (is (= false @handler-called))))
