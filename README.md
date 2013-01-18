@@ -4,7 +4,7 @@ Ring middleware to facilitate audit requirements.
 
 Makes use of [clout](https://github.com/weavejester/clout) to match routes and execute an ```fn``` of your choice!
 
-Have it write to a db, send a message to a queue, send an email...
+Have it write to a db, place a message on a queue, send an email...
 
 ## Installation
 
