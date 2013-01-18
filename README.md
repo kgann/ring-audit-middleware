@@ -23,6 +23,12 @@ Have it write to a db, send a message to a queue, send an email...
   (GET "/foo/bar/:id" ...)
   (POST "/admin/:id/edit" ...)
   (POST "/users" ...))
+
+(defn audit-fn [req params] ... )
+
+(def app
+  (-> (handler/site foo-app)
+      (wrap-audit-middleware audit-fn)))
 ```
 
 #### The audit ```fn```
