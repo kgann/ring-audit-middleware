@@ -34,32 +34,36 @@ Must accept two arguments, the ring request map and map of request parameters fr
 
 #### Options for ```wrap-audit-middleware```
 
-Audit all routes
 - - -
+Audit all routes
+
 ```clojure
 (def app
   (-> (handler/site foo-app)
       (wrap-audit-middleware audit-fn)))
 ```
 
-Provide a collection of routes (see clout documentation) to determine if the request should be audited
 - - -
+Provide a collection of routes (see clout documentation) to determine if the request should be audited
+
 ```clojure
 (def app
   (-> (handler/site foo-app) ;; audit all admin member routes and all user routes
       (wrap-audit-middleware audit-fn :routes ["/admin/:id/*" "/users/*"])))
 ```
 
-Instruct the middleware to audit routes in a future (useful for long running audits)
 - - -
+Instruct the middleware to audit routes in a future (useful for long running audits)
+
 ```clojure
 (def app
   (-> (handler/site foo-app)
       (wrap-audit-middleware audit-fn :future true)))
 ```
 
-Why not both?
 - - -
+Why not both?
+
 ```clojure
 (def app
   (-> (handler/site foo-app)
