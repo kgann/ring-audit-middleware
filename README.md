@@ -27,7 +27,10 @@ Have it write to a db, send a message to a queue, send an email...
 
 #### The audit ```fn```
 
-Must accept two arguments, the ring request map and map of request parameters from clout (see clout documentation)
+Must accept two arguments
+  1. ring request map
+  2. request parameters from clout (see clout documentation)
+
 ```clojure
 (defn audit-fn [req params] ... )
 ```
