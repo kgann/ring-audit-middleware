@@ -46,7 +46,7 @@ Must accept two arguments
 #### Options for ```wrap-audit-middleware```
 
 - - -
-Audit all routes
+###### Audit all routes
 
 ```clojure
 (def app
@@ -55,7 +55,7 @@ Audit all routes
 ```
 
 - - -
-Provide a collection of routes (see clout documentation) to determine if the request should be audited
+###### Provide a collection of routes (see clout documentation) to determine if the request should be audited
 
 ```clojure
 (def app
@@ -64,7 +64,7 @@ Provide a collection of routes (see clout documentation) to determine if the req
 ```
 
 - - -
-Instruct the middleware to audit routes in a future (useful for long running audits)
+###### Instruct the middleware to audit routes in a future (useful for long running audits)
 
 ```clojure
 (def app
@@ -73,7 +73,7 @@ Instruct the middleware to audit routes in a future (useful for long running aud
 ```
 
 - - -
-Why not both?
+###### Why not both?
 
 ```clojure
 (def app
@@ -82,7 +82,7 @@ Why not both?
 ```
 
 - - -
-Easily create as many audit middleware pieces as you need
+###### Easily create as many audit middleware pieces as you need
 
 ```clojure
 (def app
