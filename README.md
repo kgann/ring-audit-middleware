@@ -79,6 +79,16 @@ Why not both?
       (wrap-audit-middleware audit-fn :routes ["/admin/:id/*"] :future true)))
 ```
 
+- - -
+Easily create as many audit middleware pieces as you need
+
+```clojure
+(def app
+  (-> (handler/site foo-app)
+      (wrap-audit-middleware some-audit-fn-for-admin-routes :routes ["/admin/:id/*"])
+      (wrap-audit-middleware some-audit-fn-for-user-routes :routes ["/user/*"])))
+```
+
 ## License
 
 Copyright (C) 2013 Kyle Gann
